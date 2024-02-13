@@ -1,0 +1,45 @@
+oauth_authorize = PAGE
+oauth_authorize {
+  config {
+    disableAllHeaderCode = 1
+    xhtml_cleaning = 0
+    admPanel = 0
+    debug = 0
+    no_cache = 1
+  }
+
+  typeNum = 11557601
+
+  10 = USER
+  10 {
+    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+    extensionName = Oauth2Login
+    vendorName = Wiminno
+    pluginName = Pi1
+    controller = Token
+    action = authorize
+  }
+}
+
+oauth_callback = PAGE
+oauth_callback {
+  config {
+    disableAllHeaderCode = 1
+    xhtml_cleaning = 0
+    admPanel = 0
+    debug = 0
+    no_cache = 1
+  }
+
+  typeNum = 11557602
+
+  10 = USER
+  10 {
+    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+    extensionName = Oauth2Login
+    vendorName = Wiminno
+    pluginName = Pi2
+    controller = Token
+    action = verify
+  }
+}

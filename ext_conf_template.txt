@@ -1,0 +1,12 @@
+# cat=Azure//1; type=string; label=Azure Client Id
+clientId =
+# cat=Azure//2; type=string; label=Azure Client Secret
+clientSecret =
+# cat=Azure//3; type=string; label=Callback/Redirect URL for Azure
+redirectUri =
+# cat=User//4; type=int; label=Frontend Users Storage Folder
+feUserStoragePid =
+# cat=User//5; type=string; label=Group(s) to be assigned for Frontend Users (comma separated)
+feUserGroups =
+# cat=User//6; type=string; label=Redirect URL after successful login
+feUserRedirectUri =

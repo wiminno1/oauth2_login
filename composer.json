@@ -1,0 +1,29 @@
+{
+	"name": "wiminno/oauth2-login",
+	"type": "typo3-cms-extension",
+	"description": "Enables TYPO3 OAuth2 Login for Frontend Users",
+	"version": "1.0.0",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Kallol Chakraborty",
+			"email": "kchakraborty@learntube.de",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"typo3/cms-core": "^12.4",
+		"league/oauth2-client": "^2.7",
+		"thenetworg/oauth2-azure": "^2.2"
+	},
+	"autoload": {
+		"psr-4": {
+			"Wiminno\\Oauth2Login\\": "Classes"
+		}
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "oauth2_login"
+		}
+	}
+}
