@@ -2,7 +2,7 @@
 	"name": "wiminno/oauth2-login",
 	"type": "typo3-cms-extension",
 	"description": "Enables TYPO3 OAuth2 Login for Frontend Users",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"license": "MIT",
 	"authors": [
 		{

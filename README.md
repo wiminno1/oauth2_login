@@ -25,6 +25,7 @@ The installation process is straightforward and involves the following steps:
 2. Configure the following values in `Settings > Extension Configuration > oauth2_login > Azure`:
    * Azure Client Id - Obtain from your Azure Application.
    * Azure Client Secret - Obtain from your Azure Application.
+   * Azure Tenant Id - Obtain from your Azure Application (For a multi-tenant application you may leave it as empty).
    * Callback/Redirect URL for Azure - Recommended to set as `https://{your-host}/oauth2/callback`. Ensure the same value is set within your Azure Application.
 3. Configure the following values in `Settings > Extension Configuration > oauth2_login > User`:
    * Frontend Users Storage Folder - Set the PID value of a storage folder for the Frontend User.

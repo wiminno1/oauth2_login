@@ -60,6 +60,10 @@ class TokenController extends ActionController
         $this->extConfig = $configObj->get('oauth2_login');
 
         foreach ($this->extConfig as $configKey=>$configValue) {
+            if (in_array($configKey, ['tenantId'])) {
+                continue;
+            }
+
             if (empty($configValue)) {
                 throw new RuntimeException('Incomplete setup. Missing configuration: '. $configKey);
             }
@@ -69,11 +73,14 @@ class TokenController extends ActionController
             'clientId' => trim($this->extConfig['clientId']),
             'clientSecret' => trim($this->extConfig['clientSecret']),
             'redirectUri' => trim($this->extConfig['redirectUri']),
-            //'clientCertificatePrivateKey' => '{azure-client-certificate-private-key}',    //Optional
-            //'clientCertificateThumbprint' => '{azure-client-certificate-thumbprint}',     //Optional
             'scopes' => ['openid'],
             'defaultEndPointVersion' => '2.0'
         ];
+
+        $tenantId = trim($this->extConfig['tenantId']);
+        if (!empty($tenantId)) {
+            $configuration['tenant'] = $tenantId;
+        }
 
         $this->context = GeneralUtility::makeInstance(Context::class);
         $this->provider = GeneralUtility::makeInstance(Azure::class, $configuration);
@@ -130,7 +137,12 @@ class TokenController extends ActionController
                     $me = $this->provider->get($this->provider->getRootMicrosoftGraphUri($token) . '/v1.0/me', $token);
                     setcookie('OAuth2UserId', base64_encode($me['id']), time() + 300, '/', '', true, true);
 
-                    // Check if user is available with the registered email
+                    // Validate user E-mail for further processing
+                    if (!filter_var($me['mail'], FILTER_VALIDATE_EMAIL)) {
+                        throw new RuntimeException('E-mail field is not configured for the user: '.$me['displayName']);
+                    }
+
+                    // Check if user with the detected E-mail already exists in TYPO3 system
                     $user = $this->userService->findByEmail($me['mail']);
                     if (empty($user)) {
                         $newUser = [
@@ -142,9 +154,11 @@ class TokenController extends ActionController
                             'pid' => $this->extConfig['feUserStoragePid'],
                             'usergroup' => $this->extConfig['feUserGroups'],
                         ];
+                        // Add a new user
                         $this->userService->addUser($newUser);
                     } else {
                         if (empty($user['oauth2_user_id'])) {
+                            // Update the existing user
                             $this->userService->updateOauth2Info($user['uid'], $me['id']);
                         }
                     }
@@ -161,6 +175,10 @@ class TokenController extends ActionController
         }
 
         // Bad Request
-        throw new RuntimeException('Bad request');
+        if (array_key_exists('error_description', $this->queryParams)) {
+            throw new RuntimeException(trim($this->queryParams['error_description']));
+        } else {
+            throw new RuntimeException('Bad request - Unknown error');
+        }
     }
 }
